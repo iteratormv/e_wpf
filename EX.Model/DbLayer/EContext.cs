@@ -1,5 +1,6 @@
 ﻿namespace EX.Model.DbLayer
 {
+    using EX.Model.DbLayer.Settings;
     using System;
     using System.Data.Entity;
     using System.Linq;
@@ -26,7 +27,14 @@
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<UserInRole> UserInRoles { get; set; }
-
+        public virtual DbSet<Command> Commands { get; set; }
+        public virtual DbSet<Tab> Tabs { get; set; }
+        public virtual DbSet<SubTab> SubTabs { get; set; }
+        public virtual DbSet<DisplaySetting> DisplaySettings { get; set; }
+        public virtual DbSet<DSCollumnSetting> DSCollumnSettings { get; set; }
+        public virtual DbSet<PrintSetting> PrintSettings { get; set; }
+        public virtual DbSet<PrintStringSetting> PrintStringSettings { get; set; }
+        public virtual DbSet<ColorSetting> ColorSettings { get; set; }
     }
 
     //public class MyEntity

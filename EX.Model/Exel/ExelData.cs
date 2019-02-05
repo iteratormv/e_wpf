@@ -1,5 +1,5 @@
 ﻿using EX.Model.DbLayer;
-using EX.ViewModel.Infrastructure;
+using EX.Model.Infrastructure;
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.Data.Entity;

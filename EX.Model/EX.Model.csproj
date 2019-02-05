@@ -60,27 +60,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbLayer\Administration\Command.cs" />
     <Compile Include="DbLayer\EContext.cs" />
-    <Compile Include="DbLayer\Role.cs" />
-    <Compile Include="DbLayer\Status.cs" />
-    <Compile Include="DbLayer\User.cs" />
-    <Compile Include="DbLayer\UserInRole.cs" />
-    <Compile Include="DbLayer\Visitor.cs" />
+    <Compile Include="DbLayer\Administration\Role.cs" />
+    <Compile Include="DbLayer\Visitor\Status.cs" />
+    <Compile Include="DbLayer\Administration\SubTab.cs" />
+    <Compile Include="DbLayer\Administration\Tab.cs" />
+    <Compile Include="DbLayer\Administration\User.cs" />
+    <Compile Include="DbLayer\Administration\UserInRole.cs" />
+    <Compile Include="DbLayer\Visitor\Visitor.cs" />
+    <Compile Include="DbLayer\Settings\ColorSetting.cs" />
+    <Compile Include="DbLayer\Settings\DisplaySetting.cs" />
+    <Compile Include="DbLayer\Settings\DSCollumnSetting.cs" />
+    <Compile Include="DbLayer\Settings\PrintSetting.cs" />
+    <Compile Include="DbLayer\Settings\PrintStringSetting.cs" />
+    <Compile Include="DTO\CommandDTO.cs" />
+    <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\StatusDTO.cs" />
+    <Compile Include="DTO\SubTabDTO.cs" />
+    <Compile Include="DTO\TabDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="DTO\UserInRoleDTO.cs" />
     <Compile Include="DTO\VisitorDTO.cs" />
     <Compile Include="Exel\ExelData.cs" />
+    <Compile Include="Infrastructure\Progress_Bar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\VisitorRepository.cs" />
-    <Compile Include="Repositories\VisitorRepositoryDTO.cs" />
+    <Compile Include="Repositories\Administration\CommandRepository.cs" />
+    <Compile Include="Repositories\Administration\CommandRepositoryDTO.cs" />
+    <Compile Include="Repositories\Administration\RoleRepositoryDTO.cs" />
+    <Compile Include="Repositories\Administration\TabRepository.cs" />
+    <Compile Include="Repositories\Administration\RoleRepository.cs" />
+    <Compile Include="Repositories\Administration\TabRepositoryDTO.cs" />
+    <Compile Include="Repositories\Administration\UserRepository.cs" />
+    <Compile Include="Repositories\Administration\UserRepositoryDTO.cs" />
+    <Compile Include="Repositories\Visitor\VisitorRepository.cs" />
+    <Compile Include="Repositories\Visitor\VisitorRepositoryDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EX.ViewModel\EX.ViewModel.csproj">
-      <Project>{0230B4B8-302A-45E2-B25D-15E8B147FC5F}</Project>
-      <Name>EX.ViewModel</Name>
-    </ProjectReference>
+    <Folder Include="Repositories\Setting\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

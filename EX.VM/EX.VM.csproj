@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0230B4B8-302A-45E2-B25D-15E8B147FC5F}</ProjectGuid>
+    <ProjectGuid>{F8688360-7ED9-4AA7-85A9-874EC1AAA8A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EX.ViewModel</RootNamespace>
-    <AssemblyName>EX.ViewModel</AssemblyName>
+    <RootNamespace>EX.VM</RootNamespace>
+    <AssemblyName>EX.VM</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,8 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administrator.cs" />
-    <Compile Include="Infrastructure\RelayCommand.cs" />
+    <Compile Include="Infrostructure\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EX.Client\EX.Client.csproj">
@@ -55,9 +58,6 @@
       <Project>{b5228112-e301-41b3-b95b-ce80499580a8}</Project>
       <Name>EX.Model</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

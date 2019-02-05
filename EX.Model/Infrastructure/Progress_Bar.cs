@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace EX.ViewModel.Infrastructure
+namespace EX.Model.Infrastructure
 {
     public class Progress_Bar : INotifyPropertyChanged
     {
