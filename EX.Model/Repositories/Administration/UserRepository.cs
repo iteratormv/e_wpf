@@ -16,7 +16,7 @@ namespace EX.Model.Repositories.Administration
 
         public User AddOrUpdateUser(User user)
         {
-            if(context.Users.Where(s=>s.Login == user.Login).Count() == 0)
+            if(context.Users.Where(s=>s.Login == user.Login&&s.Id==0).Count() == 0)
             {
                 context.Users.AddOrUpdate(user);
                 context.SaveChanges();
@@ -41,7 +41,8 @@ namespace EX.Model.Repositories.Administration
             bool result;
             try
             {
-                context.Users.Remove(user);
+                var _user = context.Users.Where(u => u.Id == user.Id).FirstOrDefault();
+                context.Users.Remove(_user);
                 context.SaveChanges();
                 result = true;
             }

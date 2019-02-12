@@ -64,7 +64,6 @@
     <Compile Include="DbLayer\EContext.cs" />
     <Compile Include="DbLayer\Administration\Role.cs" />
     <Compile Include="DbLayer\Visitor\Status.cs" />
-    <Compile Include="DbLayer\Administration\SubTab.cs" />
     <Compile Include="DbLayer\Administration\Tab.cs" />
     <Compile Include="DbLayer\Administration\User.cs" />
     <Compile Include="DbLayer\Administration\UserInRole.cs" />
@@ -91,6 +90,8 @@
     <Compile Include="Repositories\Administration\TabRepository.cs" />
     <Compile Include="Repositories\Administration\RoleRepository.cs" />
     <Compile Include="Repositories\Administration\TabRepositoryDTO.cs" />
+    <Compile Include="Repositories\Administration\UserInRoleRepository.cs" />
+    <Compile Include="Repositories\Administration\UserInRoleRepositoryDTO.cs" />
     <Compile Include="Repositories\Administration\UserRepository.cs" />
     <Compile Include="Repositories\Administration\UserRepositoryDTO.cs" />
     <Compile Include="Repositories\Visitor\VisitorRepository.cs" />

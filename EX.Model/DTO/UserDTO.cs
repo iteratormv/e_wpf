@@ -1,17 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace EX.Model.DTO
 {
-    public class UserDTO
+    public class UserDTO : INotifyPropertyChanged
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
+        int id;
+        string firstName;
+        string lastName;
+        string login;
+        string password;
+        bool isSelected;
+
+        public int Id { get { return id; } set { id = value; OnPropertyChanged(nameof(Id)); } }
+        public string FirstName { get { return firstName; } set { firstName = value; OnPropertyChanged(nameof(FirstName)); } }
+        public string LastName { get { return lastName; } set { lastName = value; OnPropertyChanged(nameof(LastName)); } }
+        public string Login { get { return login; } set { login = value; OnPropertyChanged(nameof(Login)); } }
+        public string Password { get { return password; } set { password = value; OnPropertyChanged(nameof(Password)); } }
+        public bool IsSelected { get { return isSelected; } set { isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            VerifyPropertyName(propertyName);
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        [Conditional("DEBUG")]
+        private void VerifyPropertyName(string propertyName)
+        {
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+                throw new ArgumentNullException(GetType().Name + " does not contain property: " + propertyName);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -13,5 +13,6 @@ namespace EX.Model.DTO
         public bool IsChecked { get; set; }
 
         public int TabId { get; set; }
+        public int RoleId { get; set; }
     }
 }

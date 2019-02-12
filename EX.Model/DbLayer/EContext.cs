@@ -29,7 +29,6 @@
         public virtual DbSet<UserInRole> UserInRoles { get; set; }
         public virtual DbSet<Command> Commands { get; set; }
         public virtual DbSet<Tab> Tabs { get; set; }
-        public virtual DbSet<SubTab> SubTabs { get; set; }
         public virtual DbSet<DisplaySetting> DisplaySettings { get; set; }
         public virtual DbSet<DSCollumnSetting> DSCollumnSettings { get; set; }
         public virtual DbSet<PrintSetting> PrintSettings { get; set; }

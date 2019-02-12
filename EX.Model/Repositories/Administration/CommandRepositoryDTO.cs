@@ -14,15 +14,20 @@ namespace EX.Model.Repositories.Administration
         IMapper mapper;
         CommandRepository commandRepository;
 
-        public CommandRepositoryDTO(int roleId)
+        public CommandRepositoryDTO()
         {
-            commandRepository = new CommandRepository(roleId);
+            commandRepository = new CommandRepository();
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Command, CommandDTO>();
                 cfg.CreateMap<CommandDTO, Command>();
             });
             mapper = configuration.CreateMapper();
+        }
+
+        public void AddCommandDTOsForCurrentRoles(int roleId)
+        {
+            commandRepository.AddCommandForCurrentRole(roleId);
         }
 
         public void RemoveCommandRepository(int roleId)

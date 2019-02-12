@@ -12,16 +12,20 @@ namespace EX.Model.Repositories.Administration
     {
         EContext context;
 
-        public CommandRepository(int roleId)
+        public CommandRepository()
         {
             context = new EContext();
+        }
 
+        public void AddCommandForCurrentRole(int roleId)
+        {
             context.Commands.Add(new Command { Name = "AddUser", IsChecked = true, RoleId = roleId });
             context.Commands.Add(new Command { Name = "DelUser", IsChecked = true, RoleId = roleId });
             context.Commands.Add(new Command { Name = "AddRoles", IsChecked = true, RoleId = roleId });
             context.Commands.Add(new Command { Name = "DelRoles", IsChecked = true, RoleId = roleId });
             context.Commands.Add(new Command { Name = "SaveChanges", IsChecked = true, RoleId = roleId });
             context.Commands.Add(new Command { Name = "LoadFile", IsChecked = true, RoleId = roleId });
+            context.SaveChanges();
         }
 
         public void RemoveCommandRepository(int roleId)

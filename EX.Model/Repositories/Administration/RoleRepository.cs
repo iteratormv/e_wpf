@@ -16,24 +16,24 @@ namespace EX.Model.Repositories.Administration
 
         public Role AddOrUpdate(Role role)
         {
-            if(context.Roles.Where(r => r.Name == role.Name).Count() == 0)
+            bool needAddAtribute = role.Id == 0;
+            context.Roles.AddOrUpdate(role);
+            context.SaveChanges();
+            if (needAddAtribute)
             {
-                context.Roles.AddOrUpdate(role);
-                context.SaveChanges();
-                if (role.Id == 0)
-                {
-                    var roleId = context.Roles.Where(r => r.Name == role.Name).FirstOrDefault().Id;
-                    new TabRepository(roleId);
-                    new CommandRepository(roleId);
-                }
+                var roleId = context.Roles.Where(r => r.Name == role.Name).FirstOrDefault().Id;
+                var tabs = new TabRepository();
+                var commands = new CommandRepository();
+                tabs.AddTabsForCurrentRole(roleId);
+                commands.AddCommandForCurrentRole(roleId);
             }
             return context.Roles.Where(r => r.Name == role.Name).FirstOrDefault();    
         }
 
         public void RemoveRole(Role role)
         {
-
-            context.Roles.Remove(role);
+            var delRole = context.Roles.Where(r => r.Id == role.Id).FirstOrDefault();
+            context.Roles.Remove(delRole);
             context.SaveChanges();
         }
 

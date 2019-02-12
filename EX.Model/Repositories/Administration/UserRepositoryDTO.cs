@@ -25,7 +25,8 @@ namespace EX.Model.Repositories.Administration
         public UserDTO AddOrUpdate(UserDTO userDTO)
         {
             User user = mapper.Map<User>(userDTO);
-            if(user != null){ userDTO = mapper.Map<UserDTO>(userRepository.AddOrUpdateUser(user)); }
+            if(user != null){ userDTO = mapper.Map<UserDTO>
+                    (userRepository.AddOrUpdateUser(user)); }
             return userDTO;
         }
 
