@@ -117,11 +117,10 @@
                                             <RowDefinition Height="30"/>
                                         </Grid.RowDefinitions>
                                         <Label Grid.Row="0">Логин</Label>
-                                        <TextBox Grid.Row="1" Margin="0,4"></TextBox>
+                                        <TextBox Grid.Row="1" Margin="0,4" Text="{Binding LoginInUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                         <Label Grid.Row="2">Пароль</Label>
-                                        <PasswordBox Grid.Row="3" Margin="0,4" ></PasswordBox>
-                                        <Button Grid.Row="4" Margin="10,20" Visibility="Visible">Авторизоваться</Button>
-                                        <Button Grid.Row="4" Margin="10,20" Visibility="Hidden">Пройти регистрацию</Button>
+                                        <PasswordBox Grid.Row="3" Margin="0,4" Name="tbAuthPassword"></PasswordBox>
+                                        <Button Grid.Row="4" Margin="10,20" Visibility="Visible" Command="{Binding AutorisitionUser}" CommandParameter="{Binding ElementName=tbAuthPassword}">Авторизоваться</Button>
                                     </Grid>
                                 </Grid>
                                 <Grid Grid.Column="1">
@@ -137,27 +136,36 @@
                                         <RowDefinition Height="70"/>
                                         <RowDefinition Height="30"/>
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="0" Margin="20" Name="statusAuhorisationControl">Вы авторизированы как - guest</Label>
+                                    <Label Grid.Row="0" Margin="20" Name="statusAuhorisationControl" Content="{Binding StatusAuthorisation, UpdateSourceTrigger=PropertyChanged}"></Label>
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Управление доступом">
+                        <TabItem Header="Управление доступом" Height="{Binding VisibleManageUserRole}">
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="3*"></RowDefinition>
-                                    <RowDefinition Height="2*"></RowDefinition>
-                                </Grid.RowDefinitions>
                                 <Grid Grid.Row="0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                                        <ColumnDefinition Width="19*"></ColumnDefinition>
+                                        <ColumnDefinition Width="36*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="0">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
-                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="3*"/>
+                                                <RowDefinition Height="30" />
+                                                <RowDefinition Height="2*" />
                                             </Grid.RowDefinitions>
+                                            <Label  Margin="10,0,10,0" Grid.Row="2">Команды</Label>
+                                            <ListBox Margin="10,0,10,0" Grid.Row="3" ItemsSource="{Binding Commands}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <CheckBox IsChecked="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
                                             <Label Grid.Row="0" Margin="10,0,10,0">Пользователи(логин)</Label>
                                             <ListBox Grid.Row="1" Margin="10,0,10,0" SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" ItemsSource="{Binding Users}">
                                                 <i:Interaction.Triggers>
@@ -185,21 +193,34 @@
                                     <Grid Grid.Column="2">
                                         <Grid Grid.Row="0" Margin="10,0,10,0">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="2*"/>
-                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="17*"/>
                                             </Grid.ColumnDefinitions>
                                             <Grid Grid.Column="0">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="30"/>
-                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="3*"/>
+                                                    <RowDefinition Height="30" />
+                                                    <RowDefinition Height="2*" />
                                                 </Grid.RowDefinitions>
+                                                <Label  Grid.Row="2">Закладки</Label>
+                                                <ListBox  Grid.Row="3" SelectedItem="{Binding SelectedTab}" SelectionMode="Single" ItemsSource="{Binding Tabs}">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                <TextBlock Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" />
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
                                                 <Label Grid.Row="0" Grid.ColumnSpan="2" >Роли</Label>
                                                 <ListBox Grid.Row="1" Grid.ColumnSpan="2" SelectedItem="{Binding SelectedRole}" SelectionMode="Single" ItemsSource="{Binding Roles}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger  EventName="SelectionChanged">
                                                             <i:InvokeCommandAction 
                                                             Command="{Binding RoleChanged}"
-                                                            CommandParameter="{Binding SelectedRole}"/>
+                                                            CommandParameter="{Binding sele}"/>
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                     <ListBox.ItemTemplate>
@@ -218,62 +239,22 @@
                                                 <Button Grid.Column="0" Margin="5" Command="{Binding AddRole}">Добавить роль</Button>
                                                 <Button Grid.Column="1" Margin="5" Command="{Binding DelRole}">Удалить роль</Button>
                                                 <Button Grid.Column="2" Margin="5" Command="{Binding SaveChanges}">Сохранить изменения</Button>
-                                                <Label>Роль по умолчанию</Label>
+                                                <Label Margin="0,30,0,0">Роль по умолчанию</Label>
                                                 <TextBox Margin="5" Text="{Binding DefaultRole.Name, UpdateSourceTrigger=PropertyChanged}"/>
                                                 <Button Grid.Column="2" Margin="5" Command="{Binding SetDefaulRole}">Установить роль по умолчанию</Button>
-                                                <Label>Роль для пользовалеля</Label>
-                                                <TextBox Margin="5" Text="{Binding SelectedRole.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                                <Button Grid.Column="0" Margin="5" Command="{Binding SetUserRole}">Установить роль</Button>
+                                                <Label Margin="0,0,0,0">Пользователь по умолчанию</Label>
+                                                <TextBox Margin="5" Text="{Binding DefaultUser.Login}" />
+                                                <Button Grid.Column="2" Margin="5" Command="{Binding SetDefaultUser}">Установить пользователя по умолчанию</Button>
+                                                <Label Margin="0,30,0,0">Роль для пользовалеля</Label>
+                                                <TextBox Margin="5" Text="{Binding SelectedRole.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <Button Grid.Column="0" Margin="5" Command="{Binding SetUserRole}">Установить роль пользователю</Button>
                                                 <Button Grid.Column="1" Margin="5" Command="{Binding DelUser}">Удалить пользователя</Button>
                                             </StackPanel>
                                         </Grid>
 
                                     </Grid>
                                 </Grid>
-                                <Grid Grid.Row="1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid Grid.Column="0">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="30" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Label  Margin="10,0,10,0" Grid.Row="0">Команды</Label>
-                                            <ListBox Margin="10,0,10,0" Grid.Row="1" ItemsSource="{Binding Commands}">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <CheckBox IsChecked="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid Grid.Column="1">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="30" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Label  Margin="10,0,10,0" Grid.Row="0">Закладки</Label>
-                                            <ListBox Margin="10,0,10,0" Grid.Row="1" SelectedItem="{Binding SelectedTab}" SelectionMode="Single" ItemsSource="{Binding Tabs}">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                            <TextBlock Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" />
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
+                                
                             </Grid>
                         </TabItem>
                     </TabControl>

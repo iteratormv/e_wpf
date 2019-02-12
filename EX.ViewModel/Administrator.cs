@@ -15,6 +15,15 @@ namespace EX.ViewModel
 
     public class Administrator : INotifyPropertyChanged
     {
+        int visibleManageUserRole;
+
+
+        public int VisibleManageUserRole { get { return visibleManageUserRole; }
+            set { visibleManageUserRole = value; OnPropertyChanged(nameof(VisibleManageUserRole)); } }
+
+
+
+
         UserRepositoryDTO userRepository;
         RoleRepositoryDTO roleRepository;
         UserInRoleRepositoryDTO userInRoleRepository;
@@ -30,24 +39,26 @@ namespace EX.ViewModel
         UserDTO selectedUser;
         UserDTO regisrationUser;
         UserDTO authorizedUser;
+        UserDTO defaultUser;
         RoleDTO selectedRole;
         RoleDTO defaultRole;
         RoleDTO addedRole;
-//        TabDTO selectedTab;
 
         string statusRegistration;
         string statusAuthorisation;
+        string loginInUser;
 
         public UserDTO SelectedUser { get { return selectedUser; } set { selectedUser = value; OnPropertyChanged(nameof(SelectedUser)); } }
         public UserDTO RegistrationUser { get { return regisrationUser; } set { regisrationUser = value; OnPropertyChanged(nameof(RegistrationUser)); } }
-        public UserDTO AuthrizedUser { get { return authorizedUser; } set { authorizedUser = value; OnPropertyChanged(nameof(AuthrizedUser)); } }
+        public UserDTO AuthorizedUser { get { return authorizedUser; } set { authorizedUser = value; OnPropertyChanged(nameof(AuthorizedUser)); } }
+        public UserDTO DefaultUser { get { return defaultUser; }set { defaultUser = value; OnPropertyChanged(nameof(DefaultUser)); }  }
         public RoleDTO SelectedRole { get { return selectedRole; } set { selectedRole = value; OnPropertyChanged(nameof(SelectedRole)); } }
         public RoleDTO DefaultRole { get { return defaultRole; } set { defaultRole = value; OnPropertyChanged(nameof(DefaultRole)); } }
         public RoleDTO AddedRole { get { return addedRole; } set { addedRole = value; OnPropertyChanged(nameof(AddedRole)); } }
-//        public TabDTO SelectedTab { get { return selectedTab; } set { selectedTab = value; OnPropertyChanged(nameof(SelectedTab)); } }
 
         public string StatusRegistration { get { return statusRegistration; } set { statusRegistration = value; OnPropertyChanged(nameof(StatusRegistration)); } }
         public string StatusAuthorisation { get { return statusAuthorisation; } set { statusAuthorisation = value; OnPropertyChanged(nameof(StatusAuthorisation)); } }
+        public string LoginInUser { get { return loginInUser; } set { loginInUser = value; OnPropertyChanged(nameof(LoginInUser)); } }
 
         public ObservableCollection<UserDTO> Users { get { return users; } set { users = value;  OnPropertyChanged(nameof(Users)); } }
         public ObservableCollection<RoleDTO> Roles { get { return roles; } set { roles = value; OnPropertyChanged(nameof(Roles)); } }
@@ -60,6 +71,9 @@ namespace EX.ViewModel
 
         RelayCommand delUser;
         public RelayCommand DelUser { get { return delUser; } }
+
+        RelayCommand setDefaultUser;
+        public RelayCommand SetDefaultUser { get { return setDefaultUser; } }
 
         RelayCommand userChanged;
         public RelayCommand UserChanged { get { return userChanged; } }
@@ -82,6 +96,9 @@ namespace EX.ViewModel
         RelayCommand setDefaultRole;
         public RelayCommand SetDefaulRole { get { return setDefaultRole; } }
 
+        RelayCommand authorisationUser;
+        public RelayCommand AutorisitionUser { get { return authorisationUser; } }
+
 
         public Administrator()
         {
@@ -94,6 +111,7 @@ namespace EX.ViewModel
             StatusRegistration = "Пройдите регистрацию";
             regisrationUser = new UserDTO();
 
+
             var checkUser = userRepository.GetUserDTOs().FirstOrDefault();
             if (checkUser == null)
             {
@@ -103,7 +121,8 @@ namespace EX.ViewModel
                     LastName = "admin",
                     Login = "admin",
                     Password = "admin".GetHashCode().ToString(),
-                    IsSelected = true
+                    IsSelected = true, 
+                    IsDefault = true                   
                 };
                 checkUser = userRepository.AddOrUpdate(newUser);
             }
@@ -135,9 +154,15 @@ namespace EX.ViewModel
             SelectedUser = users.Where(u => u.IsSelected == true).FirstOrDefault();
             SelectedRole = roles.Where(r => r.IsSelected == true).FirstOrDefault();
             DefaultRole = roles.Where(r => r.IsDefault == true).FirstOrDefault();
+            DefaultUser = userRepository.GetUserDTOs().Where(u => u.IsDefault == true).FirstOrDefault();
             Commands = new ObservableCollection<CommandDTO>(commandRepository.GetAllCommands().Where(c => c.RoleId == selectedRole.Id));
             Tabs = new ObservableCollection<TabDTO>(tabRepository.GetTabDTOs().Where(t => t.RoleId == selectedRole.Id));
 
+            SetComandAndTabSettings(defaultUser);
+
+            StatusAuthorisation = "Вы авторизированы как - " + 
+                defaultUser.Login + "(" + defaultUser.FirstName + " " + defaultUser.LastName + ")";
+            AuthorizedUser = new UserDTO();
 
             addUser = new RelayCommand(c =>
             {
@@ -208,6 +233,21 @@ namespace EX.ViewModel
                 roleRepository.AddOrUpdate(newSelectedRole);
                 Roles = new ObservableCollection<RoleDTO>(roleRepository.GetAllRoles());
                 SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
+            });
+
+            setDefaultUser = new RelayCommand(c =>
+            {
+                var oldDefaultUser = userRepository.GetUserDTOs().Where(u => u.IsDefault == true).FirstOrDefault();
+                if (selectedUser.Id != oldDefaultUser.Id)
+                {
+                    oldDefaultUser.IsDefault = false;
+                    var newDefaultUser = userRepository.GetUserDTOs().Where(u => u.Id == selectedUser.Id).FirstOrDefault();
+                    newDefaultUser.IsDefault = true;
+                    userRepository.AddOrUpdate(oldDefaultUser);
+                    userRepository.AddOrUpdate(newDefaultUser);
+
+                    DefaultUser = userRepository.GetUserDTOs().Where(u => u.IsDefault == true).FirstOrDefault();
+                }
             });
 
             addRole = new RelayCommand(c =>
@@ -336,6 +376,38 @@ namespace EX.ViewModel
                     }
                 }
             });
+
+            authorisationUser = new RelayCommand(c =>
+            {
+                System.Windows.Controls.PasswordBox p = (System.Windows.Controls.PasswordBox)c;
+                var checkAuthUser = userRepository.GetUserDTOs().Where(u => u.Login == loginInUser).FirstOrDefault();
+                if (checkAuthUser != null)
+                {
+                    bool checkPass = checkAuthUser.Password == p.Password.GetHashCode().ToString();
+                    if (checkPass)
+                    {
+                        AuthorizedUser = checkAuthUser;
+                        StatusAuthorisation = "Вы авторизированы как  - " +
+                         authorizedUser.Login + " (" + authorizedUser.FirstName + " " + authorizedUser.LastName + ")";
+                        SetComandAndTabSettings(authorizedUser);
+                    }
+                    else StatusAuthorisation = "Пароль не совпадает с оригиналом";
+                }
+                else StatusAuthorisation = "Такой логин не зарегистрирован в базе";
+
+                LoginInUser = "";
+                p.Clear();
+            });
+        }
+
+        private void SetComandAndTabSettings(UserDTO user)
+        {
+            var _roleId = userInRoleRepository.GetAllUserInRolesDTOs().
+                        Where(r => r.UserId == user.Id).FirstOrDefault().RoleId;
+            var commands = commandRepository.GetAllCommands().Where(c => c.RoleId == _roleId);
+            var tabs = tabRepository.GetTabDTOs().Where(t => t.RoleId == _roleId);
+            VisibleManageUserRole = tabs.Where(t => t.Name == "Управление доступом (Администрирование)")
+                .Select(s => s.IsChecked).FirstOrDefault()?30:0;
         }
 
         private void CheckAndCorrectAddedRoleIfNeed(RoleDTO _addedRole)

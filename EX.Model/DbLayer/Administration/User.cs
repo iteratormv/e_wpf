@@ -10,6 +10,7 @@ namespace EX.Model.DbLayer
         public string Login { get; set; }
         public string Password { get; set; }
         public bool IsSelected { get; set; }
+        public bool IsDefault { get; set; }
 
         public virtual List<Status> Statuses { get; set; }
         public virtual List<UserInRole> UserInRoles { get; set; }
