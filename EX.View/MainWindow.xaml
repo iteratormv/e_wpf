@@ -41,8 +41,15 @@
                         <ColumnDefinition Width="600*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel >
-                        <Label Margin="10" Content=""/>
-                        <Button Margin="10" Content="Загрузить данные из файла"/>
+                        <Label
+                            Margin="10" 
+                            Content="{
+                            Binding _ProgressBar.Status, 
+                            UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button 
+                            Margin="10"  
+                            Content="Загрузить данные из файла"
+                            Command="{Binding AddDataFromFileToDatabase}"/>
                         <Button Margin="10" Content="Удалить данные файл"/>
                         <Button Margin="10" Content="Выгрузить данные в файл Exel"/>
                     </StackPanel>
@@ -53,7 +60,7 @@
                                  VerticalAlignment="Top" 
                                  Width="538" 
                                  RenderTransformOrigin="0.6,-2"
-                                 Value="0"
+                                 Value="{Binding _ProgressBar.Progress}"
                                  Visibility="Visible"/>
                 </Grid>
             </TabItem>

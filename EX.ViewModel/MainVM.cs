@@ -1,14 +1,19 @@
 ﻿using EX.Model.DbLayer.Settings;
 using EX.Model.DTO;
 using EX.Model.DTO.Setting;
+using EX.Model.Infrastructure;
+using EX.Model.Repositories;
 using EX.Model.Repositories.Administration;
 using EX.Model.Repositories.Setting;
 using EX.ViewModel.Infrastructure;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace EX.ViewModel
@@ -184,6 +189,26 @@ namespace EX.ViewModel
         #endregion
         #endregion
 
+        VisitorRepositoryDTO visitorRepositoryDTO;
+
+        ObservableCollection<VisitorDTO> visitors;
+        public ObservableCollection<VisitorDTO> Visitors
+        {
+            get { return visitors; }
+            set { visitors = value; OnPropertyChanged(nameof(Visitors)); }
+        }
+
+        Progress_Bar progressBar;
+        public Progress_Bar _ProgressBar
+        {
+            get { return progressBar; }
+            set { progressBar = value; OnPropertyChanged(nameof(_ProgressBar)); }
+        }
+
+        RelayCommand addDataFromFileToDatabase;
+        public RelayCommand AddDataFromFileToDatabase { get { return addDataFromFileToDatabase; } }
+
+
         public MainVM()
         {
             #region Init value for Administration
@@ -333,6 +358,8 @@ namespace EX.ViewModel
             }
             updateAllSettings();
             #endregion
+            visitorRepositoryDTO = new VisitorRepositoryDTO();
+            visitorRepositoryDTO.progressChanged += ProgressChanged;
 
             #region Implementation cammands for Administration
             addUser = new RelayCommand(c =>
@@ -663,6 +690,29 @@ namespace EX.ViewModel
                 updateAllSettings();
             });
             #endregion
+
+            addDataFromFileToDatabase = new RelayCommand(c =>
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                _ProgressBar = new Progress_Bar
+                {
+                    Visible = true, Progress = 10, Status = "Start"
+                };
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        visitorRepositoryDTO.InitRepositoryFromFole
+                        (openFileDialog.FileName);
+                        Visitors = new ObservableCollection<VisitorDTO>
+                        (visitorRepositoryDTO.GetAllVisitors());
+                        _ProgressBar.Status = "All data added to database";
+                        _ProgressBar.Progress = 0;
+                        Thread.Sleep(3000);
+                        _ProgressBar.Visible = false;
+                    });
+                }
+            });
         }
         #region Implemetation methods
         private void addNewCollumn(string _intendant, int dsid, int osid)
@@ -739,6 +789,13 @@ namespace EX.ViewModel
             Where(d=>d.DisplaySettingId == selectedDisplaySetting.Id));
             SelectedCollumnSetting = DSCollumnSettings.
             Where(s => s.IsSelected == true).FirstOrDefault();
+        }
+        private void ProgressChanged(Progress_Bar progress)
+        {
+            _ProgressBar.Progress = progress.Progress;
+            _ProgressBar.Status = progress.Status;
+            _ProgressBar.Visible = progress.Visible;
+ //           Thread.Sleep(25);
         }
         #endregion
         #region Events

@@ -16,7 +16,6 @@ namespace EX.Model.Repositories
         public VisitorRepositoryDTO()
         {
             visitorRepository = new VisitorRepository();
-            visitorRepository.progressChanged += progressChanged;
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Visitor, VisitorDTO>();
@@ -27,7 +26,7 @@ namespace EX.Model.Repositories
        
         public void InitRepositoryFromFole(string fileName)
         {
-            visitorRepository.initRepositoryFromFile(fileName);
+            visitorRepository.initRepositoryFromFile(fileName, progressChanged);
         }
 
         public VisitorDTO AddOrUpdateVisitor(VisitorDTO visitorDTO)

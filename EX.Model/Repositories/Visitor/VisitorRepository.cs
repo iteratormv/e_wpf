@@ -16,6 +16,7 @@ namespace EX.Model.Repositories
         public VisitorRepository()
         {
             context = new EContext();
+            progress = new Progress_Bar();
         }
 
         //public VisitorRepository(string file)
@@ -40,7 +41,7 @@ namespace EX.Model.Repositories
             return v;
         }
 
-        public void initRepositoryFromFile(string fileName)
+        public void initRepositoryFromFile(string fileName, Action<Progress_Bar> progressChanged)
         {
             ExelData exelData = new ExelData(fileName, progressChanged);
             progress.Status = "Delete old visitors";
@@ -63,16 +64,17 @@ namespace EX.Model.Repositories
             context.SaveChanges();
             progress.Status = "Add new data to collection";
             progress.Progress = 0;
-            //int c = 1;
-            //var col = context.Visitors;
-            //var s = col.Count() + 1;
-            //foreach (var v in col)
-            //{
-            //    progress.Progress = (int)(c * 100 / s);
-            //    progressChanged(progress);
-            //    visitorCollection.Add(v);
-            //    c++;
-            //}
+            int c = 1;
+            var col = context.Visitors;
+            var s = col.Count() + 1;
+            foreach (var v in col)
+            {
+                progress.Progress = (int)(c * 100 / s);
+                progressChanged(progress);
+                //   visitorCollection.Add(v);
+                AddOrUpdateVisitor(v);
+                c++;
+            }
         }
 
 
@@ -139,7 +141,7 @@ namespace EX.Model.Repositories
         }
 
 
-        public event Action<Progress_Bar> progressChanged;
+  //      public event Action<Progress_Bar> progressChanged;
 
     }
 }
