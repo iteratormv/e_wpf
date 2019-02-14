@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using EX.Model.DbLayer;
 using EX.Model.DTO;
+using EX.Model.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +16,7 @@ namespace EX.Model.Repositories
         public VisitorRepositoryDTO()
         {
             visitorRepository = new VisitorRepository();
+            visitorRepository.progressChanged += progressChanged;
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Visitor, VisitorDTO>();
@@ -22,6 +25,11 @@ namespace EX.Model.Repositories
             mapper = config.CreateMapper();
         }
        
+        public void InitRepositoryFromFole(string fileName)
+        {
+            visitorRepository.initRepositoryFromFile(fileName);
+        }
+
         public VisitorDTO AddOrUpdateVisitor(VisitorDTO visitorDTO)
         {
             Visitor visitor = mapper.Map<Visitor>(visitorDTO);
@@ -66,5 +74,7 @@ namespace EX.Model.Repositories
             catch { result = false; }
             return result;
         }
+
+        public event Action<Progress_Bar> progressChanged;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using EX.Model.DbLayer;
 using EX.Model.Exel;
+using EX.Model.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -9,25 +11,71 @@ namespace EX.Model.Repositories
     public class VisitorRepository
     {
         EContext context;
-        ExelData exelData;
+        Progress_Bar progress;
 
         public VisitorRepository()
         {
             context = new EContext();
         }
 
-        public VisitorRepository(string file)
+        //public VisitorRepository(string file)
+        //{
+        //    context = new EContext();
+        //    if (!context.Database.Exists())
+        //    {
+        //        context.Database.Delete();
+        //        context.SaveChanges();
+        //        exelData = new ExelData(file);
+        //        exelData.setDataToCollection(context.Visitors);
+        //        context.SaveChanges();
+        //    }
+        //}
+
+        public IEnumerable<Visitor> AddDataToRepositoryFromFile(string fileName)
         {
-            context = new EContext();
-            if (!context.Database.Exists())
-            {
-                context.Database.Delete();
-                context.SaveChanges();
-                exelData = new ExelData(file);
-                exelData.setDataToCollection(context.Visitors);
-                context.SaveChanges();
-            }
+            ExelData exelData = new ExelData(fileName);
+            exelData.setDataToCollection(context.Visitors);
+            context.SaveChanges();
+            var v = context.Visitors.ToList();
+            return v;
         }
+
+        public void initRepositoryFromFile(string fileName)
+        {
+            ExelData exelData = new ExelData(fileName, progressChanged);
+            progress.Status = "Delete old visitors";
+            progress.Progress = 0;
+            using (var ctx = new EContext())
+            {
+                int count = 1;
+                var collection = ctx.Visitors.ToList();
+                var size = collection.Count() + 1;
+                foreach (var u in collection)
+                {
+                    progress.Progress = (int)(count * 100 / size);
+                    progressChanged(progress);
+                    ctx.Visitors.Remove(u);
+                    count++;
+                }
+                ctx.SaveChanges();
+            }
+            exelData.setDataToCollection(context.Visitors, progressChanged);
+            context.SaveChanges();
+            progress.Status = "Add new data to collection";
+            progress.Progress = 0;
+            //int c = 1;
+            //var col = context.Visitors;
+            //var s = col.Count() + 1;
+            //foreach (var v in col)
+            //{
+            //    progress.Progress = (int)(c * 100 / s);
+            //    progressChanged(progress);
+            //    visitorCollection.Add(v);
+            //    c++;
+            //}
+        }
+
+
 
         public Visitor AddOrUpdateVisitor(Visitor visitor)
         {
@@ -89,6 +137,9 @@ namespace EX.Model.Repositories
             context.Visitors.Remove(context.Visitors.Where(c => c.Id == Id).FirstOrDefault());
             context.SaveChanges();
         }
+
+
+        public event Action<Progress_Bar> progressChanged;
 
     }
 }

@@ -18,8 +18,6 @@ namespace EX.Model.Repositories.Administration
             {
                 cfg.CreateMap<Tab, TabDTO>();
                 cfg.CreateMap<TabDTO, Tab>();
-//                cfg.CreateMap<SubTab, SubTabDTO>();
-//                cfg.CreateMap<SubTabDTO, SubTab>();
             });
             mapper = config.CreateMapper();
         }

@@ -27,21 +27,6 @@ namespace EX.Model.Repositories.Administration
             context.Tabs.Add(new Tab { Name = "Управление доступом (Администрирование)", IsChecked = true,/* IsSelected = false,*/ RoleId = roleId });
             context.Tabs.Add(new Tab { Name = "Режим работы (Сеть)", IsChecked = true, /*IsSelected = false,*/ RoleId = roleId });
             context.SaveChanges();
-
-            //var ConfigurationId = context.Tabs.Where(t => t.Name == "Configuration").Select(s => s.Id).FirstOrDefault();
-            //context.SubTabs.Add(new SubTab { Name = "LabelFilds", IsChecked = true, TabId = ConfigurationId });
-            //context.SubTabs.Add(new SubTab { Name = "BageColor", IsChecked = true, TabId = ConfigurationId });
-            //context.SubTabs.Add(new SubTab { Name = "Desctop", IsChecked = true, TabId = ConfigurationId });
-            //context.SubTabs.Add(new SubTab { Name = "Raport", IsChecked = true, TabId = ConfigurationId });
-
-            //var NetId = context.Tabs.Where(t => t.Name == "Net").Select(s => s.Id).FirstOrDefault();
-            //context.SubTabs.Add(new SubTab { Name = "Mode", IsChecked = true, TabId = NetId });
-
-            //var AdministrationId = context.Tabs.Where(t => t.Name == "Administration").Select(s => s.Id).FirstOrDefault();
-            //context.SubTabs.Add(new SubTab { Name = "Registration", IsChecked = true, TabId = AdministrationId });
-            //context.SubTabs.Add(new SubTab { Name = "Authorization", IsChecked = true, TabId = AdministrationId });
-            //context.SubTabs.Add(new SubTab { Name = "Manage", IsChecked = true, TabId = AdministrationId });
-            //context.SaveChanges();
         }
 
         public void RemoveCurrentTabRepository(int roleId)

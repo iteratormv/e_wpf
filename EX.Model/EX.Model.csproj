@@ -75,6 +75,8 @@
     <Compile Include="DbLayer\Settings\PrintStringSetting.cs" />
     <Compile Include="DTO\CommandDTO.cs" />
     <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\Setting\DisplaySettingDTO.cs" />
+    <Compile Include="DTO\Setting\DSCollumnSettingDTO.cs" />
     <Compile Include="DTO\StatusDTO.cs" />
     <Compile Include="DTO\SubTabDTO.cs" />
     <Compile Include="DTO\TabDTO.cs" />
@@ -94,6 +96,10 @@
     <Compile Include="Repositories\Administration\UserInRoleRepositoryDTO.cs" />
     <Compile Include="Repositories\Administration\UserRepository.cs" />
     <Compile Include="Repositories\Administration\UserRepositoryDTO.cs" />
+    <Compile Include="Repositories\Setting\DisplaySettingDTORepository.cs" />
+    <Compile Include="Repositories\Setting\DisplaySettingRepository.cs" />
+    <Compile Include="Repositories\Setting\DSCollumnSettingDTORepository.cs" />
+    <Compile Include="Repositories\Setting\DSCollumnSettingRepository.cs" />
     <Compile Include="Repositories\Visitor\VisitorRepository.cs" />
     <Compile Include="Repositories\Visitor\VisitorRepositoryDTO.cs" />
   </ItemGroup>
@@ -101,8 +107,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\Setting\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,8 @@
-﻿using EX.Model.DbLayer;
+﻿using EX.Model.DbLayer.Settings;
 using EX.Model.DTO;
+using EX.Model.DTO.Setting;
 using EX.Model.Repositories.Administration;
+using EX.Model.Repositories.Setting;
 using EX.ViewModel.Infrastructure;
 using System;
 using System.Collections.ObjectModel;
@@ -8,34 +10,43 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace EX.ViewModel
 {
-
-    public class Administrator : INotifyPropertyChanged
+    public class MainVM : INotifyPropertyChanged
     {
+        #region context for Administration
+        #region Visibte Tab Settigs
         int visibleManageUserRole;
 
 
-        public int VisibleManageUserRole { get { return visibleManageUserRole; }
-            set { visibleManageUserRole = value; OnPropertyChanged(nameof(VisibleManageUserRole)); } }
-
-
-
-
+        public int VisibleManageUserRole
+        {
+            get { return visibleManageUserRole; }
+            set { visibleManageUserRole = value; OnPropertyChanged(nameof(VisibleManageUserRole)); }
+        }
+        #endregion
+        #region Repositories for Administration
         UserRepositoryDTO userRepository;
         RoleRepositoryDTO roleRepository;
         UserInRoleRepositoryDTO userInRoleRepository;
         CommandRepositoryDTO commandRepository;
         TabRepositoryDTO tabRepository;
-
+        #endregion
+        #region Collection for Administration
         ObservableCollection<UserDTO> users;
         ObservableCollection<RoleDTO> roles;
         ObservableCollection<CommandDTO> commands;
         ObservableCollection<TabDTO> tabs;
         ObservableCollection<SubTabDTO> subTabs;
 
+        public ObservableCollection<UserDTO> Users { get { return users; } set { users = value; OnPropertyChanged(nameof(Users)); } }
+        public ObservableCollection<RoleDTO> Roles { get { return roles; } set { roles = value; OnPropertyChanged(nameof(Roles)); } }
+        public ObservableCollection<CommandDTO> Commands { get { return commands; } set { commands = value; OnPropertyChanged(nameof(Commands)); } }
+        public ObservableCollection<TabDTO> Tabs { get { return tabs; } set { tabs = value; OnPropertyChanged(nameof(Tabs)); } }
+        public ObservableCollection<SubTabDTO> SubTabs { get { return subTabs; } set { subTabs = value; OnPropertyChanged(nameof(SubTabs)); } }
+        #endregion
+        #region Fields for Administration
         UserDTO selectedUser;
         UserDTO regisrationUser;
         UserDTO authorizedUser;
@@ -44,28 +55,24 @@ namespace EX.ViewModel
         RoleDTO defaultRole;
         RoleDTO addedRole;
 
+        public UserDTO SelectedUser { get { return selectedUser; } set { selectedUser = value; OnPropertyChanged(nameof(SelectedUser)); } }
+        public UserDTO RegistrationUser { get { return regisrationUser; } set { regisrationUser = value; OnPropertyChanged(nameof(RegistrationUser)); } }
+        public UserDTO AuthorizedUser { get { return authorizedUser; } set { authorizedUser = value; OnPropertyChanged(nameof(AuthorizedUser)); } }
+        public UserDTO DefaultUser { get { return defaultUser; } set { defaultUser = value; OnPropertyChanged(nameof(DefaultUser)); } }
+        public RoleDTO SelectedRole { get { return selectedRole; } set { selectedRole = value; OnPropertyChanged(nameof(SelectedRole)); } }
+        public RoleDTO DefaultRole { get { return defaultRole; } set { defaultRole = value; OnPropertyChanged(nameof(DefaultRole)); } }
+        public RoleDTO AddedRole { get { return addedRole; } set { addedRole = value; OnPropertyChanged(nameof(AddedRole)); } }
+        #endregion
+        #region Service fields for Administration
         string statusRegistration;
         string statusAuthorisation;
         string loginInUser;
 
-        public UserDTO SelectedUser { get { return selectedUser; } set { selectedUser = value; OnPropertyChanged(nameof(SelectedUser)); } }
-        public UserDTO RegistrationUser { get { return regisrationUser; } set { regisrationUser = value; OnPropertyChanged(nameof(RegistrationUser)); } }
-        public UserDTO AuthorizedUser { get { return authorizedUser; } set { authorizedUser = value; OnPropertyChanged(nameof(AuthorizedUser)); } }
-        public UserDTO DefaultUser { get { return defaultUser; }set { defaultUser = value; OnPropertyChanged(nameof(DefaultUser)); }  }
-        public RoleDTO SelectedRole { get { return selectedRole; } set { selectedRole = value; OnPropertyChanged(nameof(SelectedRole)); } }
-        public RoleDTO DefaultRole { get { return defaultRole; } set { defaultRole = value; OnPropertyChanged(nameof(DefaultRole)); } }
-        public RoleDTO AddedRole { get { return addedRole; } set { addedRole = value; OnPropertyChanged(nameof(AddedRole)); } }
-
         public string StatusRegistration { get { return statusRegistration; } set { statusRegistration = value; OnPropertyChanged(nameof(StatusRegistration)); } }
         public string StatusAuthorisation { get { return statusAuthorisation; } set { statusAuthorisation = value; OnPropertyChanged(nameof(StatusAuthorisation)); } }
         public string LoginInUser { get { return loginInUser; } set { loginInUser = value; OnPropertyChanged(nameof(LoginInUser)); } }
-
-        public ObservableCollection<UserDTO> Users { get { return users; } set { users = value;  OnPropertyChanged(nameof(Users)); } }
-        public ObservableCollection<RoleDTO> Roles { get { return roles; } set { roles = value; OnPropertyChanged(nameof(Roles)); } }
-        public ObservableCollection<CommandDTO> Commands { get { return commands; } set { commands = value; OnPropertyChanged(nameof(Commands)); } }
-        public ObservableCollection<TabDTO> Tabs { get { return tabs; } set { tabs = value; OnPropertyChanged(nameof(Tabs)); } }
-        public ObservableCollection<SubTabDTO> SubTabs { get { return subTabs; } set { subTabs = value; OnPropertyChanged(nameof(SubTabs)); } }
-
+        #endregion
+        #region Commands for Administration
         RelayCommand addUser;
         public RelayCommand AddUser { get { return addUser; } }
 
@@ -98,10 +105,88 @@ namespace EX.ViewModel
 
         RelayCommand authorisationUser;
         public RelayCommand AutorisitionUser { get { return authorisationUser; } }
-
-
-        public Administrator()
+        #endregion
+        #endregion
+        #region Context for Settings
+        #region Repositories for Settings
+        DisplaySettingDTORepository displaySettingDTORepository;
+        DSCollumnSettingDTORepository dSCollumnSettingDTORepository;
+        public DisplaySettingDTORepository DisplaySettingDTORepository
         {
+            get { return displaySettingDTORepository;  }
+            set { displaySettingDTORepository = value;
+                OnPropertyChanged(nameof(DisplaySettingDTORepository));
+            }
+        }
+        public DSCollumnSettingDTORepository DSCollumnSettingDTORepository
+        {
+            get { return dSCollumnSettingDTORepository;}
+            set { dSCollumnSettingDTORepository = value;
+                OnPropertyChanged(nameof(DSCollumnSettingDTORepository));
+            }
+        }
+        #endregion
+        #region Collection for Settings
+        ObservableCollection<DisplaySettingDTO> displaySettings;
+        ObservableCollection<DSCollumnSettingDTO> dSCollumnSettings;
+        public ObservableCollection<DisplaySettingDTO> DisplaySettings
+        {
+            get { return displaySettings; }
+            set { displaySettings = value;
+                OnPropertyChanged(nameof(DisplaySettings));
+            }
+        }
+        public ObservableCollection<DSCollumnSettingDTO> DSCollumnSettings
+        {
+            get { return dSCollumnSettings; }
+            set { dSCollumnSettings = value;
+                OnPropertyChanged(nameof(DSCollumnSettings));
+            }
+        }
+        #endregion
+        #region Fields for Settings
+        DisplaySettingDTO selectedDisplaySetting;
+        DSCollumnSettingDTO selectedCollumnSetting;
+        public DisplaySettingDTO SelectedDisplaySetting
+        {
+            get { return selectedDisplaySetting; }
+            set { selectedDisplaySetting = value;
+                OnPropertyChanged(nameof(SelectedDisplaySetting)); }
+        }
+        public DSCollumnSettingDTO SelectedCollumnSetting
+        {
+            get { return selectedCollumnSetting; }
+            set { selectedCollumnSetting = value;
+                OnPropertyChanged(nameof(SelectedCollumnSetting)); }
+        }
+        #endregion
+        #region Commands for Setings
+        RelayCommand addCollumn;
+        public RelayCommand AddCollumn { get { return addCollumn; } }
+
+        RelayCommand removeCollumn;
+        public RelayCommand RemoveCollumn { get { return removeCollumn; } }
+
+        RelayCommand saveColumn;
+        public RelayCommand SeveCollumn { get { return saveColumn; } }
+
+        RelayCommand addSetting;
+        public RelayCommand AddSetting { get { return addSetting; } }
+
+        RelayCommand delSetting;
+        public RelayCommand DelSetting { get { return delSetting; } }
+
+        RelayCommand saveSettingChanges;
+        public RelayCommand SaveSettingChanges { get { return saveSettingChanges; } }
+
+        RelayCommand changeDisplaySettingDefault;
+        public RelayCommand ChangeDisplaySettingDefault { get { return changeDisplaySettingDefault; } }
+        #endregion
+        #endregion
+
+        public MainVM()
+        {
+            #region Init value for Administration
             userRepository = new UserRepositoryDTO();
             roleRepository = new RoleRepositoryDTO();
             userInRoleRepository = new UserInRoleRepositoryDTO();
@@ -110,7 +195,6 @@ namespace EX.ViewModel
 
             StatusRegistration = "Пройдите регистрацию";
             regisrationUser = new UserDTO();
-
 
             var checkUser = userRepository.GetUserDTOs().FirstOrDefault();
             if (checkUser == null)
@@ -121,8 +205,8 @@ namespace EX.ViewModel
                     LastName = "admin",
                     Login = "admin",
                     Password = "admin".GetHashCode().ToString(),
-                    IsSelected = true, 
-                    IsDefault = true                   
+                    IsSelected = true,
+                    IsDefault = true
                 };
                 checkUser = userRepository.AddOrUpdate(newUser);
             }
@@ -160,29 +244,117 @@ namespace EX.ViewModel
 
             SetComandAndTabSettings(defaultUser);
 
-            StatusAuthorisation = "Вы авторизированы как - " + 
+            StatusAuthorisation = "Вы авторизированы как - " +
                 defaultUser.Login + "(" + defaultUser.FirstName + " " + defaultUser.LastName + ")";
             AuthorizedUser = new UserDTO();
+            #endregion
+            #region init value for Settings
+            displaySettingDTORepository = new DisplaySettingDTORepository();
+            dSCollumnSettingDTORepository = new DSCollumnSettingDTORepository();
 
+            displaySettings = new ObservableCollection<DisplaySettingDTO>
+                (displaySettingDTORepository.GetAllDisplaySettingDTOs());
+            DisplaySettingDTO defaultDisplayDesktopSetting;
+            if (displaySettings.Count() == 0)
+            {
+                defaultDisplayDesktopSetting = new DisplaySettingDTO
+                {
+                    Name = "default",
+                    IsSelected = true,
+                    Intendant = "raport"
+                };
+                //DisplaySettingDTO defaultDisplayRaportSetting = new DisplaySettingDTO
+                //{
+                //    Name = "dafault",
+                //    IsSelected = true,
+                //    Intendant = "raport"
+                //};
+            }
+            else defaultDisplayDesktopSetting = displaySettingDTORepository.
+                  GetAllDisplaySettingDTOs().Where(s => s.IsSelected == true).
+                  FirstOrDefault();
+            var defaultDisplayDesktopSettingId = displaySettingDTORepository.
+                AddOrUpdate(defaultDisplayDesktopSetting).Id;
+            //var defaultDisplayRaportSettingId = displaySettingDTORepository.
+            //    AddOrUpdate(defaultDisplayRaportSetting).Id;
+            dSCollumnSettings = new ObservableCollection<DSCollumnSettingDTO>                (dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs());
+
+            if (dSCollumnSettings.Count() == 0)
+            {
+                dSCollumnSettingDTORepository.AddOrUpdate(new DSCollumnSettingDTO
+                {
+                    Name = "Id",
+                    Alias = "№",
+                    Width = 100,
+                    Visible = true,
+                    IsSelected = true,
+                    DisplaySettingId = defaultDisplayDesktopSettingId
+                });
+
+                dSCollumnSettingDTORepository.AddOrUpdate(new DSCollumnSettingDTO
+                {
+                    Name = "FirstName",
+                    Alias = "Имя",
+                    Width = 100,
+                    Visible = true,
+                    IsSelected = false,
+                    DisplaySettingId = defaultDisplayDesktopSettingId
+                });
+
+                dSCollumnSettingDTORepository.AddOrUpdate(new DSCollumnSettingDTO
+                {
+                    Name = "LastName",
+                    Alias = "Фамилия",
+                    Width = 100,
+                    Visible = true,
+                    IsSelected = false,
+                    DisplaySettingId = defaultDisplayDesktopSettingId
+                });
+
+                dSCollumnSettingDTORepository.AddOrUpdate(new DSCollumnSettingDTO
+                {
+                    Name = "Сompany",
+                    Alias = "Компания",
+                    Width = 100,
+                    Visible = true,
+                    IsSelected = false,
+                    DisplaySettingId = defaultDisplayDesktopSettingId
+                });
+
+                dSCollumnSettingDTORepository.AddOrUpdate(new DSCollumnSettingDTO
+                {
+                    Name = "Jobtitle",
+                    Alias = "Должность",
+                    Width = 100,
+                    Visible = true,
+                    IsSelected = false,
+                    DisplaySettingId = defaultDisplayDesktopSettingId
+                });
+            }
+            updateAllSettings();
+            #endregion
+
+            #region Implementation cammands for Administration
             addUser = new RelayCommand(c =>
             {
                 System.Windows.Controls.PasswordBox p = (System.Windows.Controls.PasswordBox)c;
                 var isLoginExist = userRepository.GetUserDTOs().Where(u => u.Login == regisrationUser.Login).Count() != 0;
                 if (isLoginExist) StatusRegistration = "Пользователь с логином " + regisrationUser.Login + " уже зарегистрирован";
                 else
-                {                    
+                {
                     regisrationUser.Password = p.Password.GetHashCode().ToString();
                     regisrationUser.IsSelected = true;
                     var _selectedUser = userRepository.GetUserDTOs().Where(u => u.IsSelected == true).FirstOrDefault();
                     _selectedUser.IsSelected = false;
                     userRepository.AddOrUpdate(_selectedUser);
-                  /*  var _registrationUser = */userRepository.AddOrUpdate(regisrationUser);
- //                   Users.Add(_registrationUser);
- //                   Users.Where(u => u.Id == _selectedUser.Id).FirstOrDefault().IsSelected = false;
+                    userRepository.AddOrUpdate(regisrationUser);
                     Users = new ObservableCollection<UserDTO>(userRepository.GetUserDTOs());
                     SelectedUser = Users.Where(u => u.IsSelected == true).FirstOrDefault();
-                    userInRoleRepository.AddOrUpdate(new UserInRoleDTO {
-                        UserId = selectedUser.Id, RoleId = defaultRole.Id });
+                    userInRoleRepository.AddOrUpdate(new UserInRoleDTO
+                    {
+                        UserId = selectedUser.Id,
+                        RoleId = defaultRole.Id
+                    });
                     StatusRegistration = "Вы успешно прошли регистрацию\n" +
                     "Ваши регистрационные данные:\n" +
                     "Имя - " + SelectedUser.FirstName + "\n" +
@@ -203,7 +375,6 @@ namespace EX.ViewModel
                     SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
                 }
             });
-
             delUser = new RelayCommand(c =>
             {
                 var delUserInRole = userInRoleRepository.GetAllUserInRolesDTOs().
@@ -217,8 +388,6 @@ namespace EX.ViewModel
                     var nsuid = userRepository.AddOrUpdate(newSelectedUser).Id;
                     users.Where(u => u.Id == nsuid).FirstOrDefault().IsSelected = true;
                 }
-         //       var delUser = selectedUser;
-                //                Users.Remove(delUser);
                 Users = new ObservableCollection<UserDTO>(userRepository.GetUserDTOs());
                 SelectedUser = Users.Where(u => u.IsSelected == true).FirstOrDefault();
                 var oldSelectedRole = roleRepository.GetAllRoles().
@@ -226,7 +395,7 @@ namespace EX.ViewModel
                 oldSelectedRole.IsSelected = false;
                 roleRepository.AddOrUpdate(oldSelectedRole);
                 var newSelectedRoleId = userInRoleRepository.GetAllUserInRolesDTOs().Where
-                    (ur => ur.UserId == selectedUser.Id).Select(r=>r.Id).FirstOrDefault();
+                    (ur => ur.UserId == selectedUser.Id).Select(r => r.Id).FirstOrDefault();
                 var newSelectedRole = roleRepository.GetAllRoles().Where
                        (r => r.Id == newSelectedRoleId).FirstOrDefault();
                 newSelectedRole.IsSelected = true;
@@ -234,7 +403,6 @@ namespace EX.ViewModel
                 Roles = new ObservableCollection<RoleDTO>(roleRepository.GetAllRoles());
                 SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
             });
-
             setDefaultUser = new RelayCommand(c =>
             {
                 var oldDefaultUser = userRepository.GetUserDTOs().Where(u => u.IsDefault == true).FirstOrDefault();
@@ -249,7 +417,6 @@ namespace EX.ViewModel
                     DefaultUser = userRepository.GetUserDTOs().Where(u => u.IsDefault == true).FirstOrDefault();
                 }
             });
-
             addRole = new RelayCommand(c =>
             {
                 var isRoleExist = roleRepository.GetAllRoles().Where(r => r.Name == addedRole.Name).Count() > 0;
@@ -258,18 +425,18 @@ namespace EX.ViewModel
                     roleRepository.AddOrUpdate(addedRole);
                     Roles = new ObservableCollection<RoleDTO>(roleRepository.GetAllRoles());
                     CheckAndCorrectAddedRoleIfNeed(addedRole);
-                } else{ CheckAndCorrectAddedRoleIfNeed(addedRole); }
+                }
+                else { CheckAndCorrectAddedRoleIfNeed(addedRole); }
                 SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
             });
-
             delRole = new RelayCommand(c =>
             {
-                var isUseSelectedRole = userInRoleRepository.GetAllUserInRolesDTOs().Where(ur => ur.RoleId == SelectedRole.Id).Count()>0;
+                var isUseSelectedRole = userInRoleRepository.GetAllUserInRolesDTOs().Where(ur => ur.RoleId == SelectedRole.Id).Count() > 0;
                 if (isUseSelectedRole)
                 {
                     MessageBox.Show("Данная роль не может быть удалена, так как предназначена как мимнимум одному пользователю");
                 }
-                else if(selectedRole.IsDefault == true)
+                else if (selectedRole.IsDefault == true)
                 {
                     MessageBox.Show("Данная роль не может быть удалена так как определена как роль по умолчанию");
                 }
@@ -282,7 +449,6 @@ namespace EX.ViewModel
                 Roles = new ObservableCollection<RoleDTO>(roleRepository.GetAllRoles());
                 SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
             });
-
             setDefaultRole = new RelayCommand(c =>
             {
                 var oldDefaultRole = roleRepository.GetAllRoles().Where(r => r.IsDefault == true).FirstOrDefault();
@@ -295,11 +461,10 @@ namespace EX.ViewModel
                 DefaultRole = Roles.Where(r => r.IsDefault == true).FirstOrDefault();
                 SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
             });
-
             setUserRole = new RelayCommand(c =>
             {
                 var oldSelectedUser = userRepository.GetUserDTOs().Where(u => u.IsSelected == true).FirstOrDefault();
-                if(SelectedUser.Id != oldSelectedUser.Id)
+                if (SelectedUser.Id != oldSelectedUser.Id)
                 {
                     oldSelectedUser.IsSelected = false;
                     var newSelectedUser = userRepository.GetUserDTOs().Where(u => u.Id == SelectedUser.Id).FirstOrDefault();
@@ -308,7 +473,7 @@ namespace EX.ViewModel
                     userRepository.AddOrUpdate(newSelectedUser);
                 }
                 var oldSelectedRole = roleRepository.GetAllRoles().Where(r => r.IsSelected == true).FirstOrDefault();
-                if(SelectedRole.Id != oldSelectedRole.Id)
+                if (SelectedRole.Id != oldSelectedRole.Id)
                 {
                     oldSelectedRole.IsSelected = false;
                     var newSelectedRole = roleRepository.GetAllRoles().Where(r => r.Id == SelectedRole.Id).FirstOrDefault();
@@ -323,10 +488,9 @@ namespace EX.ViewModel
                 Roles = new ObservableCollection<RoleDTO>(roleRepository.GetAllRoles());
                 SelectedRole = Roles.Where(r => r.IsSelected == true).FirstOrDefault();
                 selectedUser = Users.Where(u => u.IsSelected == true).FirstOrDefault();
-                Commands = new ObservableCollection<CommandDTO>(commandRepository.GetAllCommands().Where(co=>co.RoleId == selectedRole.Id));
+                Commands = new ObservableCollection<CommandDTO>(commandRepository.GetAllCommands().Where(co => co.RoleId == selectedRole.Id));
                 Tabs = new ObservableCollection<TabDTO>(tabRepository.GetTabDTOs().Where(t => t.RoleId == selectedRole.Id));
             });
-
             roleChanged = new RelayCommand(c =>
             {
                 int selectedRoleId;
@@ -335,13 +499,11 @@ namespace EX.ViewModel
                 Commands = new ObservableCollection<CommandDTO>(commandRepository.GetAllCommands().Where(co => co.RoleId == selectedRoleId));
                 Tabs = new ObservableCollection<TabDTO>(tabRepository.GetTabDTOs().Where(t => t.RoleId == selectedRoleId));
             });
-
             saveChanges = new RelayCommand(с =>
             {
                 commandRepository.UpdateCommandRepository(commands);
                 tabRepository.UpdateTabRepository(tabs);
             });
-
             userChanged = new RelayCommand(c =>
             {
                 if (selectedUser != null)
@@ -376,7 +538,6 @@ namespace EX.ViewModel
                     }
                 }
             });
-
             authorisationUser = new RelayCommand(c =>
             {
                 System.Windows.Controls.PasswordBox p = (System.Windows.Controls.PasswordBox)c;
@@ -398,8 +559,141 @@ namespace EX.ViewModel
                 LoginInUser = "";
                 p.Clear();
             });
+            #endregion
+            #region Emplementation command for Settings
+            addSetting = new RelayCommand(c =>
+            {
+                var _intendant = c as string;
+                var cur_set = displaySettingDTORepository.GetAllDisplaySettingDTOs().
+                Where(s => s.IsSelected == true && s.Intendant == _intendant).
+                Select(s => s).FirstOrDefault();
+                var osid = cur_set.Id;
+                string new_set_name = "NewSetting1";
+                while (displaySettingDTORepository.GetAllDisplaySettingDTOs().
+                Where(s => s.Name == new_set_name).Count() > 0)
+                {
+                    string d_name = new_set_name.Trim(
+                        new char[] { 'N', 'e', 'w', 'S', 't', 'i', 'n', 'g' });
+                    int d = int.Parse(d_name) + 1;
+                    new_set_name = "NewSetting" + d.ToString();
+                }
+                var _n_set = new DisplaySettingDTO()
+                {
+                    Name = new_set_name,
+                    IsSelected = false,
+                    Intendant = _intendant
+                };
+                var n_set = displaySettingDTORepository.AddOrUpdate(_n_set);
+                addNewCollumn(_intendant, n_set.Id, osid);
+                if (cur_set != null)
+                {
+                    cur_set.IsSelected = false;
+                    displaySettingDTORepository.AddOrUpdate(cur_set);
+                }
+                n_set.IsSelected = true;
+                displaySettingDTORepository.AddOrUpdate(n_set);
+                updateAllSettings();
+            });
+            delSetting = new RelayCommand(c =>
+            {
+                var _intendant = c as string;
+                DisplaySettingDTO s_ds = displaySettingDTORepository.GetAllDisplaySettingDTOs().
+                Where(s => s.IsSelected == true && s.Intendant == _intendant).FirstOrDefault();
+                var del_cs = dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs().
+                Where(s => s.DisplaySettingId == selectedDisplaySetting.Id);
+                foreach (var dc in del_cs)
+                {
+                    dSCollumnSettingDTORepository.RemoveDSCollumnSettingDTO(dc);
+                }
+                if (selectedDisplaySetting.IsSelected == true)
+                {
+                    s_ds = displaySettingDTORepository.GetAllDisplaySettingDTOs().FirstOrDefault();
+                    s_ds.IsSelected = true;
+                    displaySettingDTORepository.AddOrUpdate(s_ds);
+                }
+                displaySettingDTORepository.RemoveDisplaySettingDTO(selectedDisplaySetting);
+                updateAllSettings();
+            });
+            changeDisplaySettingDefault = new RelayCommand(c =>
+            {
+                var _intendant = c as string;
+                var oldSelectedDisplaySetting = displaySettingDTORepository.GetAllDisplaySettingDTOs().
+                    Where(s => s.IsSelected == true && s.Intendant == _intendant).FirstOrDefault();
+                var oldSelectedCollumnSetting = dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs().
+                Where(s => s.IsSelected == true && s.DisplaySettingId == oldSelectedDisplaySetting.Id).
+                FirstOrDefault();
+                oldSelectedDisplaySetting.IsSelected = false;
+                oldSelectedCollumnSetting.IsSelected = false;
+                var newSelectedDisplaySetting = displaySettingDTORepository.GetAllDisplaySettingDTOs().
+                Where(s => s.Id == selectedDisplaySetting.Id && s.Intendant == _intendant).FirstOrDefault();
+                var newSelectedCollumnSetting = dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs().
+                Where(s => s.DisplaySettingId == newSelectedDisplaySetting.Id).FirstOrDefault();
+                newSelectedDisplaySetting.IsSelected = true;
+                newSelectedCollumnSetting.IsSelected = true;
+                displaySettingDTORepository.AddOrUpdate(oldSelectedDisplaySetting);
+                displaySettingDTORepository.AddOrUpdate(newSelectedDisplaySetting);
+                dSCollumnSettingDTORepository.AddOrUpdate(newSelectedCollumnSetting);
+                dSCollumnSettingDTORepository.AddOrUpdate(oldSelectedCollumnSetting);
+                updateAllSettings();
+            });
+            addCollumn = new RelayCommand(c =>
+            {
+                var _intendant = c as string;
+                var dsid = displaySettingDTORepository.GetAllDisplaySettingDTOs().
+                    Where(s => s.IsSelected == true && s.Intendant == _intendant).
+                    Select(s => s.Id).FirstOrDefault();
+                addNewCollumn(_intendant, dsid, dsid);
+                updateAllSettings();
+            });
+            saveSettingChanges = new RelayCommand(c =>
+            {
+                var _intendant = c as string;
+                foreach (var d in DisplaySettings)
+                {
+                    displaySettingDTORepository.AddOrUpdate(d);
+                }
+                foreach (var dc in DSCollumnSettings)
+                {
+                    dSCollumnSettingDTORepository.AddOrUpdate(dc);
+                }
+            });
+            removeCollumn = new RelayCommand(c =>
+            {
+                dSCollumnSettingDTORepository.RemoveDSCollumnSettingDTO(selectedCollumnSetting);
+                updateAllSettings();
+            });
+            #endregion
         }
-
+        #region Implemetation methods
+        private void addNewCollumn(string _intendant, int dsid, int osid)
+        {
+            string _name = "NewCollumn1";
+            string _alias = "NewAlias1";
+            while (dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs().
+            Where(s => s.Name == _name).Select(s => s).Count() > 0)
+            {
+                string d_name = _name.Trim(new char[] {
+                        'N', 'e', 'w', 'C', 'o', 'l', 'u', 'm', 'n' });
+                int d = int.Parse(d_name) + 1;
+                _name = "NewCollumn" + d.ToString();
+                _alias = "NewAlias" + d.ToString();
+            }
+            var oldSelectedCollumnSetting = dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs().
+            Where(s => s.IsSelected == true && s.DisplaySettingId == osid).FirstOrDefault();
+            oldSelectedCollumnSetting.IsSelected = false;
+            var newSelectedCollumnSetting = dSCollumnSettingDTORepository.AddOrUpdate(new
+                DSCollumnSettingDTO
+            {
+                Name = _name,
+                Alias = _alias,
+                Visible = true,
+                DisplaySettingId = dsid,
+                Width = 100,
+                IsSelected = true
+            });
+            dSCollumnSettingDTORepository.AddOrUpdate(oldSelectedCollumnSetting);
+            dSCollumnSettingDTORepository.AddOrUpdate(newSelectedCollumnSetting);
+        }
         private void SetComandAndTabSettings(UserDTO user)
         {
             var _roleId = userInRoleRepository.GetAllUserInRolesDTOs().
@@ -407,9 +701,8 @@ namespace EX.ViewModel
             var commands = commandRepository.GetAllCommands().Where(c => c.RoleId == _roleId);
             var tabs = tabRepository.GetTabDTOs().Where(t => t.RoleId == _roleId);
             VisibleManageUserRole = tabs.Where(t => t.Name == "Управление доступом (Администрирование)")
-                .Select(s => s.IsChecked).FirstOrDefault()?30:0;
+                .Select(s => s.IsChecked).FirstOrDefault() ? 30 : 0;
         }
-
         private void CheckAndCorrectAddedRoleIfNeed(RoleDTO _addedRole)
         {
             if (roleRepository.GetAllRoles().Where(r => r.Name == _addedRole.Name).Count() > 0)
@@ -423,21 +716,33 @@ namespace EX.ViewModel
                 }
             }
         }
-
         private void OnPropertyChanged(string propertyName)
         {
             VerifyPropertyName(propertyName);
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         [Conditional("DEBUG")]
         private void VerifyPropertyName(string propertyName)
         {
             if (TypeDescriptor.GetProperties(this)[propertyName] == null)
                 throw new ArgumentNullException(GetType().Name + " does not contain property: " + propertyName);
         }
-
+        private void updateAllSettings()
+        {
+            DisplaySettings = new ObservableCollection<DisplaySettingDTO>
+                (displaySettingDTORepository.GetAllDisplaySettingDTOs());
+            SelectedDisplaySetting = DisplaySettings.
+                Where(s => s.IsSelected == true).FirstOrDefault();
+            DSCollumnSettings = new ObservableCollection<DSCollumnSettingDTO>
+            (dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs().
+            Where(d=>d.DisplaySettingId == selectedDisplaySetting.Id));
+            SelectedCollumnSetting = DSCollumnSettings.
+            Where(s => s.IsSelected == true).FirstOrDefault();
+        }
+        #endregion
+        #region Events
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
     }
 }
