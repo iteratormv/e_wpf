@@ -8,6 +8,7 @@ using EX.Model.Repositories;
 
 namespace EX.Service.VisitorService
 {
+
     public class VisitorContract : IVisitorContract
     {
         VisitorRepositoryDTO visitorRepositoryDTO;

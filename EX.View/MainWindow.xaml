@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EX.View"
         xmlns:vm="clr-namespace:EX.ViewModel;assembly=EX.ViewModel"
+        xmlns:vmi="clr-namespace:EX.ViewModel.Infrastructure;assembly=EX.ViewModel"
         mc:Ignorable="d"
         xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -53,7 +54,10 @@
                         <Button Margin="10" Content="Удалить данные файл"/>
                         <Button Margin="10" Content="Выгрузить данные в файл Exel"/>
                     </StackPanel>
-                    <DataGrid Grid.Column="1" Margin="10,55,10,10" AutoGenerateColumns="True" ItemsSource="{Binding  VisitorCollection, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGrid Grid.Column="1"
+                              Margin="10,55,10,10" 
+                              AutoGenerateColumns="True" 
+                              ItemsSource="{Binding  Visitors, UpdateSourceTrigger=PropertyChanged}"/>
                     <ProgressBar Grid.Column="1"
                                  HorizontalAlignment="Left" 
                                  Height="30" Margin="10,10,0,0" 
@@ -304,26 +308,63 @@
                             </Style>
                         </TabControl.Resources>
                         <TabItem Header="Режим работы">
-                            <Grid>
+                            <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="300*"/>
                                     <ColumnDefinition Width="450*"/>
                                 </Grid.ColumnDefinitions>
-
+                                <Grid.Resources>
+                                </Grid.Resources>
                                 <StackPanel Margin="20" Grid.Column="0">
-                                    <RadioButton Margin="5" IsChecked="True" Content="Локальная база данных" Name="LocalDB" Command="{Binding ChangeDataMode}" CommandParameter="{Binding ElementName=LocalDB, Path=Content}"/>
-                                    <RadioButton Margin="5" Content="Сервер службы баз данных" Name="ServerDB" Command="{Binding ChangeDataMode}" CommandParameter="{Binding ElementName=ServerDB, Path=Content}"/>
-                                    <RadioButton Margin="5" Content="Клиент службы баз данных" Name="ClientDB" Command="{Binding ChangeDataMode}" CommandParameter="{Binding ElementName=ClientDB, Path=Content}"/>
+                                    <RadioButton 
+                                        IsEnabled="{Binding IsEnabledDataModeChecker}"
+                                        Margin="5" 
+                                        IsChecked="True" 
+                                        Content="Локальная база данных" 
+                                        Name="LocalDB" 
+                                        Command="{Binding ChangeDataMode}" 
+                                        CommandParameter="{
+                                        Binding ElementName=LocalDB, 
+                                        Path=Content}"/>
+                                    <RadioButton 
+                                        IsEnabled="{Binding IsEnabledDataModeChecker}"
+                                        Margin="5" 
+                                        Content="Сервер службы баз данных" 
+                                        Name="ServerDB" 
+                                        Command="{Binding ChangeDataMode}" 
+                                        CommandParameter="{
+                                        Binding ElementName=ServerDB, 
+                                        Path=Content}"/>
+                                    <RadioButton 
+                                        IsEnabled="{Binding IsEnabledDataModeChecker}"
+                                        Margin="5" 
+                                        Content="Клиент службы баз данных"
+                                        Name="ClientDB" 
+                                        Command="{Binding ChangeDataMode}" 
+                                        CommandParameter="{
+                                        Binding ElementName=ClientDB, 
+                                        Path=Content}"/>
                                 </StackPanel>
                                 <Grid Grid.Column="1">
                                     <StackPanel>
-                                        <TextBlock Margin="20" Height="150" Background="AliceBlue" Text="{Binding ServerStatus, UpdateSourceTrigger=PropertyChanged}"  ></TextBlock>
-                                        <StackPanel Orientation="Vertical" Margin="20,0,20,0">
-                                            <Button Margin="5"  Command="{Binding StartServer}">Запустить сервер</Button>
-                                            <Button Margin="5" Command="{Binding StopServer}">Остановить сервер</Button>
-                                            <Button Margin="5" Command="{Binding ClientGetAll}">getAll</Button>
-                                            <Button Margin="5" Command="{Binding Startvmhost}">Start vmhost</Button>
-                                            <Button Margin="5" Command="{Binding Stopvmhost}">Stop vmhost</Button>
+                                        <TextBlock 
+                                            Margin="20" 
+                                            Height="150" 
+                                            Background="AliceBlue" 
+                                            Text="{ Binding ServerStatus, 
+                                            UpdateSourceTrigger=PropertyChanged}"  
+                                            ></TextBlock>
+                                        <StackPanel 
+                                            Orientation="Vertical" 
+                                            Margin="20,0,20,0">
+                                            <Button 
+                                                Margin="5"  
+                                                Command="{Binding StartServer}"
+                                                >Запустить сервер</Button>
+                                            <Button 
+                                                Margin="5" 
+                                                Command="{Binding StopServer}"
+                                                >Остановить сервер</Button>
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
@@ -577,6 +618,9 @@
                         </TabItem>
                     </TabControl>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Помощь">
+                <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
     </Grid>

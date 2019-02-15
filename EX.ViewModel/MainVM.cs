@@ -1,10 +1,13 @@
-﻿using EX.Model.DbLayer.Settings;
+﻿using AutoMapper;
+using EX.Client;
+using EX.Model.DbLayer.Settings;
 using EX.Model.DTO;
 using EX.Model.DTO.Setting;
 using EX.Model.Infrastructure;
 using EX.Model.Repositories;
 using EX.Model.Repositories.Administration;
 using EX.Model.Repositories.Setting;
+using EX.Service;
 using EX.ViewModel.Infrastructure;
 using Microsoft.Win32;
 using System;
@@ -20,7 +23,7 @@ namespace EX.ViewModel
 {
     public class MainVM : INotifyPropertyChanged
     {
-        #region context for Administration
+        #region Context for Administration
         #region Visibte Tab Settigs
         int visibleManageUserRole;
 
@@ -188,29 +191,86 @@ namespace EX.ViewModel
         public RelayCommand ChangeDisplaySettingDefault { get { return changeDisplaySettingDefault; } }
         #endregion
         #endregion
-
+        #region Context for File
+        #region Repository for File
         VisitorRepositoryDTO visitorRepositoryDTO;
-
+        #endregion
+        #region Collection for File
         ObservableCollection<VisitorDTO> visitors;
         public ObservableCollection<VisitorDTO> Visitors
         {
             get { return visitors; }
             set { visitors = value; OnPropertyChanged(nameof(Visitors)); }
         }
-
+        #endregion
+        #region Filds for File
         Progress_Bar progressBar;
         public Progress_Bar _ProgressBar
         {
             get { return progressBar; }
             set { progressBar = value; OnPropertyChanged(nameof(_ProgressBar)); }
         }
-
+        #endregion
+        #region Commands for File
         RelayCommand addDataFromFileToDatabase;
         public RelayCommand AddDataFromFileToDatabase { get { return addDataFromFileToDatabase; } }
+        #endregion
+        #endregion
+        #region Context for Sevice
+        #region Fields for Service
+        ServiceExecutor serviceExecutor;
+        string dataMode;
+        string serverStatus;
+        bool isEnabledDataModeChecker;
 
+        public string DataMode
+        {
+            get
+            {
+                if(dataMode!= "Сервер службы баз данных")
+                {
+                    ServerStatus = "";
+                }
+                return dataMode;
+            }
+            set { dataMode = value; OnPropertyChanged(nameof(DataMode)); }
+        }
+        public string ServerStatus
+        {
+            get { return serverStatus; }
+            set { serverStatus = value; OnPropertyChanged(nameof(ServerStatus)); }
+        }
+        public bool IsEnabledDataModeChecker
+        {
+            get { return isEnabledDataModeChecker; }
+            set { isEnabledDataModeChecker = value; OnPropertyChanged(nameof(IsEnabledDataModeChecker)); }
+        }
+        #endregion
+        #region Command for Service
+        RelayCommand changeDataMode;
+        public RelayCommand ChangeDataMode { get { return changeDataMode; } }
+
+        RelayCommand startServer;
+        public RelayCommand StartServer
+        {
+            get { return startServer; }
+        }
+
+        RelayCommand stopServer;
+        public RelayCommand StopServer
+        {
+            get { return stopServer; }
+        }
+        #endregion
+        #endregion
+        #region Context for Client
+        ClientExecutor clientExecutor;
+        IMapper mapper;
+        #endregion
 
         public MainVM()
         {
+            DataMode = "Локальная база данных";
             #region Init value for Administration
             userRepository = new UserRepositoryDTO();
             roleRepository = new RoleRepositoryDTO();
@@ -273,7 +333,7 @@ namespace EX.ViewModel
                 defaultUser.Login + "(" + defaultUser.FirstName + " " + defaultUser.LastName + ")";
             AuthorizedUser = new UserDTO();
             #endregion
-            #region init value for Settings
+            #region Init value for Settings
             displaySettingDTORepository = new DisplaySettingDTORepository();
             dSCollumnSettingDTORepository = new DSCollumnSettingDTORepository();
 
@@ -302,7 +362,8 @@ namespace EX.ViewModel
                 AddOrUpdate(defaultDisplayDesktopSetting).Id;
             //var defaultDisplayRaportSettingId = displaySettingDTORepository.
             //    AddOrUpdate(defaultDisplayRaportSetting).Id;
-            dSCollumnSettings = new ObservableCollection<DSCollumnSettingDTO>                (dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs());
+            dSCollumnSettings = new ObservableCollection<DSCollumnSettingDTO>
+                (dSCollumnSettingDTORepository.GetAllDSCollumnSettingDTOs());
 
             if (dSCollumnSettings.Count() == 0)
             {
@@ -358,8 +419,24 @@ namespace EX.ViewModel
             }
             updateAllSettings();
             #endregion
+            #region Init value for File
             visitorRepositoryDTO = new VisitorRepositoryDTO();
             visitorRepositoryDTO.progressChanged += ProgressChanged;
+            #endregion
+            #region Init value for Service
+            IsEnabledDataModeChecker = true;
+            serviceExecutor = new ServiceExecutor(/*"192.168.0.27"*/);
+            serviceExecutor.statusChanged += StatusChanged;
+            #endregion
+            #region Init value for Client
+            clientExecutor = new ClientExecutor();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<VisitorDTO, EX.Client.ServiceReference1.VisitorDTO>();
+                cfg.CreateMap<EX.Client.ServiceReference1.VisitorDTO, VisitorDTO>();
+            });
+            mapper = config.CreateMapper();
+            #endregion
 
             #region Implementation cammands for Administration
             addUser = new RelayCommand(c =>
@@ -587,7 +664,7 @@ namespace EX.ViewModel
                 p.Clear();
             });
             #endregion
-            #region Emplementation command for Settings
+            #region Implementation command for Settings
             addSetting = new RelayCommand(c =>
             {
                 var _intendant = c as string;
@@ -690,7 +767,7 @@ namespace EX.ViewModel
                 updateAllSettings();
             });
             #endregion
-
+            #region Implementation command for File
             addDataFromFileToDatabase = new RelayCommand(c =>
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -713,7 +790,36 @@ namespace EX.ViewModel
                     });
                 }
             });
+            #endregion
+            #region Implementation command for Service
+            changeDataMode = new RelayCommand(c =>
+            {
+                DataMode = (string)c;
+                if(DataMode == "Клиент службы баз данных")
+                {
+                    var _visitors = clientExecutor.GetClient().GetAllVisitors();
+
+                    VisitorDTO visitorDTO = new VisitorDTO();
+                    Visitors = new ObservableCollection<VisitorDTO>();
+                    foreach (var v in _visitors) { Visitors.Add(mapper.Map<VisitorDTO>(v)); }
+                }
+            });
+            startServer = new RelayCommand(c =>
+            {
+                IsEnabledDataModeChecker = false;
+                Task.Factory.StartNew(serviceExecutor.Start);
+                Thread.Sleep(200);
+            }, c => 
+                 DataMode == "Сервер службы баз данных"&&ServerStatus!= "listerning....");
+            stopServer = new RelayCommand(c =>
+            {
+                IsEnabledDataModeChecker = true;
+                Task.Factory.StartNew(serviceExecutor.Stop);
+                Thread.Sleep(200);
+            }, c => ServerStatus == "listerning....");
+            #endregion
         }
+
         #region Implemetation methods
         private void addNewCollumn(string _intendant, int dsid, int osid)
         {
@@ -797,7 +903,12 @@ namespace EX.ViewModel
             _ProgressBar.Visible = progress.Visible;
  //           Thread.Sleep(25);
         }
+        private void StatusChanged(string obj)
+        {
+            ServerStatus = (string)obj;
+        }
         #endregion
+
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion

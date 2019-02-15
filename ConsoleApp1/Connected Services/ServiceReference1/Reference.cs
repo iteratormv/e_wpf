@@ -8,14 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EX.Client.ServiceReference1 {
+namespace ConsoleApp1.ServiceReference1 {
     using System.Runtime.Serialization;
     using System;
     
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VisitorDTO", Namespace="http://iterator.org")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VisitorDTO", Namespace="http://schemas.datacontract.org/2004/07/EX.Model.DTO")]
     [System.SerializableAttribute()]
     public partial class VisitorDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -303,28 +303,28 @@ namespace EX.Client.ServiceReference1 {
     public interface IVisitorContract {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/GetAllVisitors", ReplyAction="http://tempuri.org/IVisitorContract/GetAllVisitorsResponse")]
-        EX.Client.ServiceReference1.VisitorDTO[] GetAllVisitors();
+        ConsoleApp1.ServiceReference1.VisitorDTO[] GetAllVisitors();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/GetAllVisitors", ReplyAction="http://tempuri.org/IVisitorContract/GetAllVisitorsResponse")]
-        System.Threading.Tasks.Task<EX.Client.ServiceReference1.VisitorDTO[]> GetAllVisitorsAsync();
+        System.Threading.Tasks.Task<ConsoleApp1.ServiceReference1.VisitorDTO[]> GetAllVisitorsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/GetVisitorById", ReplyAction="http://tempuri.org/IVisitorContract/GetVisitorByIdResponse")]
-        EX.Client.ServiceReference1.VisitorDTO GetVisitorById(int Id);
+        ConsoleApp1.ServiceReference1.VisitorDTO GetVisitorById(int Id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/GetVisitorById", ReplyAction="http://tempuri.org/IVisitorContract/GetVisitorByIdResponse")]
-        System.Threading.Tasks.Task<EX.Client.ServiceReference1.VisitorDTO> GetVisitorByIdAsync(int Id);
+        System.Threading.Tasks.Task<ConsoleApp1.ServiceReference1.VisitorDTO> GetVisitorByIdAsync(int Id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/AddOrUpdateVisitor", ReplyAction="http://tempuri.org/IVisitorContract/AddOrUpdateVisitorResponse")]
-        void AddOrUpdateVisitor(EX.Client.ServiceReference1.VisitorDTO visitor);
+        void AddOrUpdateVisitor(ConsoleApp1.ServiceReference1.VisitorDTO visitor);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/AddOrUpdateVisitor", ReplyAction="http://tempuri.org/IVisitorContract/AddOrUpdateVisitorResponse")]
-        System.Threading.Tasks.Task AddOrUpdateVisitorAsync(EX.Client.ServiceReference1.VisitorDTO visitor);
+        System.Threading.Tasks.Task AddOrUpdateVisitorAsync(ConsoleApp1.ServiceReference1.VisitorDTO visitor);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/RemoveVisitor", ReplyAction="http://tempuri.org/IVisitorContract/RemoveVisitorResponse")]
-        void RemoveVisitor(EX.Client.ServiceReference1.VisitorDTO visitor);
+        void RemoveVisitor(ConsoleApp1.ServiceReference1.VisitorDTO visitor);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/RemoveVisitor", ReplyAction="http://tempuri.org/IVisitorContract/RemoveVisitorResponse")]
-        System.Threading.Tasks.Task RemoveVisitorAsync(EX.Client.ServiceReference1.VisitorDTO visitor);
+        System.Threading.Tasks.Task RemoveVisitorAsync(ConsoleApp1.ServiceReference1.VisitorDTO visitor);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVisitorContract/RemoveVisitorById", ReplyAction="http://tempuri.org/IVisitorContract/RemoveVisitorByIdResponse")]
         void RemoveVisitorById(int Id);
@@ -334,12 +334,12 @@ namespace EX.Client.ServiceReference1 {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IVisitorContractChannel : EX.Client.ServiceReference1.IVisitorContract, System.ServiceModel.IClientChannel {
+    public interface IVisitorContractChannel : ConsoleApp1.ServiceReference1.IVisitorContract, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class VisitorContractClient : System.ServiceModel.ClientBase<EX.Client.ServiceReference1.IVisitorContract>, EX.Client.ServiceReference1.IVisitorContract {
+    public partial class VisitorContractClient : System.ServiceModel.ClientBase<ConsoleApp1.ServiceReference1.IVisitorContract>, ConsoleApp1.ServiceReference1.IVisitorContract {
         
         public VisitorContractClient() {
         }
@@ -360,35 +360,35 @@ namespace EX.Client.ServiceReference1 {
                 base(binding, remoteAddress) {
         }
         
-        public EX.Client.ServiceReference1.VisitorDTO[] GetAllVisitors() {
+        public ConsoleApp1.ServiceReference1.VisitorDTO[] GetAllVisitors() {
             return base.Channel.GetAllVisitors();
         }
         
-        public System.Threading.Tasks.Task<EX.Client.ServiceReference1.VisitorDTO[]> GetAllVisitorsAsync() {
+        public System.Threading.Tasks.Task<ConsoleApp1.ServiceReference1.VisitorDTO[]> GetAllVisitorsAsync() {
             return base.Channel.GetAllVisitorsAsync();
         }
         
-        public EX.Client.ServiceReference1.VisitorDTO GetVisitorById(int Id) {
+        public ConsoleApp1.ServiceReference1.VisitorDTO GetVisitorById(int Id) {
             return base.Channel.GetVisitorById(Id);
         }
         
-        public System.Threading.Tasks.Task<EX.Client.ServiceReference1.VisitorDTO> GetVisitorByIdAsync(int Id) {
+        public System.Threading.Tasks.Task<ConsoleApp1.ServiceReference1.VisitorDTO> GetVisitorByIdAsync(int Id) {
             return base.Channel.GetVisitorByIdAsync(Id);
         }
         
-        public void AddOrUpdateVisitor(EX.Client.ServiceReference1.VisitorDTO visitor) {
+        public void AddOrUpdateVisitor(ConsoleApp1.ServiceReference1.VisitorDTO visitor) {
             base.Channel.AddOrUpdateVisitor(visitor);
         }
         
-        public System.Threading.Tasks.Task AddOrUpdateVisitorAsync(EX.Client.ServiceReference1.VisitorDTO visitor) {
+        public System.Threading.Tasks.Task AddOrUpdateVisitorAsync(ConsoleApp1.ServiceReference1.VisitorDTO visitor) {
             return base.Channel.AddOrUpdateVisitorAsync(visitor);
         }
         
-        public void RemoveVisitor(EX.Client.ServiceReference1.VisitorDTO visitor) {
+        public void RemoveVisitor(ConsoleApp1.ServiceReference1.VisitorDTO visitor) {
             base.Channel.RemoveVisitor(visitor);
         }
         
-        public System.Threading.Tasks.Task RemoveVisitorAsync(EX.Client.ServiceReference1.VisitorDTO visitor) {
+        public System.Threading.Tasks.Task RemoveVisitorAsync(ConsoleApp1.ServiceReference1.VisitorDTO visitor) {
             return base.Channel.RemoveVisitorAsync(visitor);
         }
         

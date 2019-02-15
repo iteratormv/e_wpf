@@ -14,7 +14,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import namespace="http://iterator.org" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EX.Model.DTO" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IVisitorContract_GetAllVisitors_InputMessage">
@@ -121,9 +121,9 @@
   </wsdl:binding>
   <wsdl:service name="VisitorContract">
     <wsdl:port name="NetTcpBinding_IVisitorContract" binding="tns:NetTcpBinding_IVisitorContract">
-      <soap12:address location="net.tcp://192.168.0.31/Visitor" />
+      <soap12:address location="net.tcp://192.168.0.23/Visitor" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://192.168.0.31/Visitor</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.0.23/Visitor</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>
